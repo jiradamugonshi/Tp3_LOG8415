@@ -10,5 +10,7 @@ sudo dpkg -i install/mysql-cluster-community-server_8.0.35-1ubuntu22.04_amd64.de
 When installing mysql-cluster-community-server, a configuration prompt should appear, asking you to set a password for the root account of your MySQL database.
 8. Run continue2_master_install.sh
 9. Verify MySQL Cluster Installation
-a- Run ## sudo ## mysql ##-u ## root ## -p Then ## SHOW ## ENGINE ## NDB ## STATUS # \G
-b- run ## ndb_mgm Then ## SHOW
+a- Run ## sudo mysql -u root -p
+Then ## SHOW ## ENGINE ## NDB ## STATUS # \G
+b- run ## ndb_mgm
+Then ## SHOW
