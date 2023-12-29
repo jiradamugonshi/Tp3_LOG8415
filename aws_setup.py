@@ -186,6 +186,7 @@ def main():
     proxy[0].reload()    
 
     sg_mysql = ec2.SecurityGroup(mysql_ecurity_group['GroupId'])
+    # add inbound rules to mysql security group
     sg_mysql.authorize_ingress(
         IpPermissions=[
             {                
@@ -235,10 +236,11 @@ def main():
     waiter.wait(InstanceIds = gk_instance_ids)
 
     # reload the instance attributes    
-    gateKeeper[0].reload()
+    gateKeeper[0].reload()    
 
     gkCidrIp = f'{gateKeeper[0].private_ip_address}/32'
     sg_proxy = ec2.SecurityGroup(proxy_security_group['GroupId'])
+    # add an inbound rule to proxy security group
     sg_proxy.authorize_ingress(IpProtocol="tcp",CidrIp=gkCidrIp,FromPort=80,ToPort=80)    
 
     # output Dns names

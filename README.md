@@ -1,4 +1,6 @@
 # Tp3_LOG8415
+The installation of the MySql was heavely inspired from this blog https://www.digitalocean.com/community/tutorials/how-to-create-a-multi-node-mysql-cluster-on-ubuntu-18-04
+
 1. Run **automation_script.sh** to run the code on the EC2 instances.
 2. Connect to the gatekeeper and run **continue_gk_install.sh**
 3. Connect to the proxy and run **continue_proxy_install.sh**

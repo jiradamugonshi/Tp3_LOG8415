@@ -5,6 +5,7 @@ KEY_NAME=ms_kp_pem.pem
 output=$(python aws_setup.py "$@")
 arr=(${output//:/ })
 
+# Retrieve the IP addresses and the DNS names
 MASTER_DNS_NAME=${arr[0]}
 MASTER_HOSTNAME=${arr[1]}
 MASTER_PRIVATE_IP=${arr[2]}
@@ -121,6 +122,7 @@ sed -i -e 's/\r$//' continue_slave3_install.sh
 
 sed -i -e 's/\r$//' sakila.sh
 
+# Push the files to the EC2 instances
 scp -i $KEY_NAME $KEY_NAME ubuntu@$GATEKEEPER_DNS_NAME:/home/ubuntu
 scp -i $KEY_NAME continue_gk_install.sh ubuntu@$GATEKEEPER_DNS_NAME:/home/ubuntu
 

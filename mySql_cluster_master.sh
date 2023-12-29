@@ -5,8 +5,10 @@ sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/nee
 
 wget https://dev.mysql.com/get/Downloads/MySQL-Cluster-8.0/mysql-cluster-community-management-server_8.0.35-1ubuntu22.04_amd64.deb
 
+# Install ndb_mgmd using dpkg
 sudo dpkg -i mysql-cluster-community-management-server_8.0.35-1ubuntu22.04_amd64.deb
 
+# Create the /var/lib/mysql-cluster directory where this file will reside
 sudo mkdir /var/lib/mysql-cluster
 
 sudo bash -c 'cat << EOF > /etc/systemd/system/ndb_mgmd.service
@@ -25,14 +27,17 @@ Restart=on-failure
 WantedBy=multi-user.target
 EOF'
 
+# Get the MySQL Cluster Server binary
 wget https://dev.mysql.com/get/Downloads/MySQL-Cluster-8.0/mysql-cluster_8.0.35-1ubuntu22.04_amd64.deb-bundle.tar
 
 sudo mkdir install
 
 sudo tar -xvf mysql-cluster_8.0.35-1ubuntu22.04_amd64.deb-bundle.tar -C install/
 
+# Install a couple of dependencies
 sudo apt update && sudo apt install -y libaio1 libmecab2
 
+# Install the MySQL Cluster dependencies
 sudo dpkg -i install/mysql-common_8.0.35-1ubuntu22.04_amd64.deb
 sudo dpkg -i install/mysql-cluster-community-client-plugins_8.0.35-1ubuntu22.04_amd64.deb
 sudo dpkg -i install/mysql-cluster-community-client-core_8.0.35-1ubuntu22.04_amd64.deb
@@ -40,4 +45,5 @@ sudo dpkg -i install/mysql-cluster-community-client_8.0.35-1ubuntu22.04_amd64.de
 sudo dpkg -i install/mysql-client_8.0.35-1ubuntu22.04_amd64.deb
 sudo dpkg -i install/mysql-cluster-community-server-core_8.0.35-1ubuntu22.04_amd64.deb
 
+# Install Sysbench
 sudo apt-get install sysbench -y

@@ -46,34 +46,42 @@ def base():
             flash('Query is required!')
           else:
             statements = sqlparse.split(query)
+            # Check if there is more than one statement
             if(len(statements) > 1):
                abort(400, "More than one statement")
             statement = sqlparse.parse(statements[0])[0]
+            # Check if the statement is a DML
             if(statement.get_type() not in dml_types):
                abort(400, "Only SELECT, INSERT, UPDATE or DELETE are authorized")
             
+            # Check if there is a Where clause and the DML statement is a Delete or an Update
             isWhere = any(map(lambda token: isinstance(token, sqlparse.sql.Where), statement))
             if(statement.get_type() in dml_types[2:] and not isWhere):
-               abort(400, "No WHERE clause in DELETE or UPDATE actions")  
+               abort(400, "No WHERE clause in DELETE or UPDATE actions") 
 
+            # Get the index of the Where clause
             idx = 0
             try:
                idx = list(map(lambda token: isinstance(token, sqlparse.sql.Where), statement)).index(True)
             except ValueError:
                idx = -1
 
+            # Parse the Where clause
             if(idx > -1):
                where = statement[idx]
                extracted_keys = get_tokens(where)
+               # Check the Where clause is not destructive like "Where 1 = 1"
                if(statement.get_type() in dml_types[2:] and any(map(lambda item: isinstance(item, bool) and item, extracted_keys))):
                   abort(400, "The query seems to be destructive")
 
+            # Determin the appropriate mode based on the DML type and the selected mode
             if(statement.get_type() in dml_types[1:]):
                mode = 'direct hit'
             else:
                mode = 'customized' if mode.lower() == 'customized' else 'random'
 
             sshtunnel.SSH_TIMEOUT = 10.0
+            # Forward the request to the trusted host
             with sshtunnel.SSHTunnelForwarder(
                ssh_address_or_host = ("%s", 22),
                ssh_username = "ubuntu",
@@ -190,6 +198,7 @@ def get_tokens(where):
 
 EOF
 
+# Create the query view template
 cat > /home/ubuntu/flaskapp/templates/query.html << EOF
 {%% extends 'base.html' %%}
 
@@ -219,6 +228,7 @@ cat > /home/ubuntu/flaskapp/templates/query.html << EOF
 
 EOF
 
+# Create the base view template
 cat > /home/ubuntu/flaskapp/templates/base.html << EOF
 <!DOCTYPE html>
 <html lang="en">

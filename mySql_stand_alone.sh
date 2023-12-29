@@ -4,6 +4,8 @@
 sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 sudo apt update
 
+# Install Mysql server
 sudo apt-get install mysql-server -y
 
+# Install Sysbench
 sudo apt-get install sysbench -y

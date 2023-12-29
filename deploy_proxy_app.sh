@@ -46,6 +46,7 @@ def proxy():
         slave3 = None 
         slaves = []
 
+        # Retrieve the cluster node private IP addresses
         with open('/home/ubuntu/cluster.json') as json_file:
            data = json.load(json_file)
            master = data['cluster']['master']
@@ -56,6 +57,7 @@ def proxy():
            slave3 = data['cluster']['slave_3']
            slaves.append(slave3)
 
+        # Determin the node based on the mode
         chosen_node = None
         if mode == 'direct hit':
           chosen_node = master

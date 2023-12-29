@@ -4,6 +4,7 @@ import json
 from scp import SCPClient
 
 
+# The set of commands to execute against the cluster
 def sysbench_cluster():
     return """
 #!/bin/bash
@@ -19,6 +20,7 @@ sudo sysbench  oltp_read_write --tables=1 --db-driver=mysql --mysql-db=sakila --
 EOF
 """
 
+# The set of commands to execute against the stand alone
 def sysbench_stand_alone():
     return """
 #!/bin/bash
@@ -34,6 +36,7 @@ sudo sysbench  oltp_read_write --tables=1 --db-driver=mysql --mysql-db=sakila --
 EOF
 """
 
+# make ssh connect to the specified DNS name
 def ssh_connect(ssh, dnsName, retries, keyName):
     if retries > 3:
         return False
@@ -51,6 +54,7 @@ def ssh_connect(ssh, dnsName, retries, keyName):
         print('Retrying SSH connection to {}'.format(dnsName))
         ssh_connect(ssh, dnsName, retries, keyName)
 
+# launch the benchmarking on the specified DNS name
 def launch_benchmark(dnsName, sysbench, keyName, benchFileName):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -60,6 +64,7 @@ def launch_benchmark(dnsName, sysbench, keyName, benchFileName):
 
     time.sleep(60)
 
+    # transfer the generated file to the local current folder
     scp = SCPClient(ssh.get_transport())
     scp.get('/home/ubuntu/' + benchFileName, './')  
 
