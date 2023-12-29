@@ -3,6 +3,7 @@
 # Ubuntu 22.04 LTS: disable the popup "Which service should be restarted ?"
 sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 
+# Get the NDB Management Server
 wget https://dev.mysql.com/get/Downloads/MySQL-Cluster-8.0/mysql-cluster-community-management-server_8.0.35-1ubuntu22.04_amd64.deb
 
 # Install ndb_mgmd using dpkg
@@ -11,6 +12,7 @@ sudo dpkg -i mysql-cluster-community-management-server_8.0.35-1ubuntu22.04_amd64
 # Create the /var/lib/mysql-cluster directory where this file will reside
 sudo mkdir /var/lib/mysql-cluster
 
+# Edit the ndb_mgmd.service file
 sudo bash -c 'cat << EOF > /etc/systemd/system/ndb_mgmd.service
 [Unit]
 Description=MySQL NDB Cluster Management Server
